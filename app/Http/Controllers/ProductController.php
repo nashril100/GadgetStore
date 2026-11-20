@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use RuntimeException;
 
 class ProductController extends Controller
 {
@@ -27,6 +29,7 @@ class ProductController extends Controller
             ->latest()
             ->paginate(10)
             ->withQueryString();
+
         $categories = Category::orderBy('name')->get();
 
         return view('products.index', compact('products', 'categories'));
@@ -49,7 +52,18 @@ class ProductController extends Controller
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
             'description' => ['nullable', 'string', 'max:2000'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ]);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('product_images', 'public');
+
+            if ($imagePath === false) {
+                throw new RuntimeException('Gambar produk gagal disimpan.');
+            }
+
+            $validated['image'] = $imagePath;
+        }
 
         Product::create($validated);
 
@@ -73,15 +87,36 @@ class ProductController extends Controller
             'price' => ['required', 'numeric', 'min:0'],
             'stock' => ['required', 'integer', 'min:0'],
             'description' => ['nullable', 'string', 'max:2000'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
         ]);
 
+        $previousImage = $product->image;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('product_images', 'public');
+
+            if ($imagePath === false) {
+                throw new RuntimeException('Gambar produk gagal disimpan.');
+            }
+
+            $validated['image'] = $imagePath;
+        }
+
         $product->update($validated);
+
+        if ($request->hasFile('image') && $previousImage && Storage::disk('public')->exists($previousImage)) {
+            Storage::disk('public')->delete($previousImage);
+        }
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
     public function destroy(Product $product)
     {
+        if ($product->image && Storage::disk('public')->exists($product->image)) {
+            Storage::disk('public')->delete($product->image);
+        }
+
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');

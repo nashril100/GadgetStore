@@ -28,11 +28,17 @@ class DashboardController extends Controller
             ->groupBy('categories.id', 'categories.name')
             ->orderBy('categories.name')->get();
         $stockStatus = [
-            Product::where('stock', '<=', 5)->count(),
+            $lowStockProducts,
             Product::whereBetween('stock', [6, 20])->count(),
             Product::where('stock', '>', 20)->count(),
         ];
         $latestProducts = Product::with('category')->latest()->take(5)->get();
+        $restockProducts = Product::with('category')
+            ->where('stock', '<=', 5)
+            ->orderBy('stock')
+            ->orderBy('name')
+            ->take(5)
+            ->get();
 
         return view('dashboard', compact(
             'totalProducts',
@@ -42,7 +48,8 @@ class DashboardController extends Controller
             'inventoryValue',
             'categoryStats',
             'stockStatus',
-            'latestProducts'
+            'latestProducts',
+            'restockProducts'
         ));
     }
 }

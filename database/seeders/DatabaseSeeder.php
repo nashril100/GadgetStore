@@ -13,16 +13,20 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         DB::transaction(function (): void {
-            User::firstOrCreate(
+            $admin = User::firstOrCreate(
                 ['email' => 'test@example.com'],
                 ['name' => 'Test User', 'password' => 'password']
             );
+            $admin->forceFill(['role' => 'admin'])->save();
+
+            $customer = User::firstOrCreate(
+                ['email' => 'customer@example.com'],
+                ['name' => 'Customer User', 'password' => 'password']
+            );
+            $customer->forceFill(['role' => 'customer'])->save();
 
             $products = [
                 ['category' => 'Smartphone', 'code' => 'DEMO-001', 'name' => 'Galaxy A55 5G 128GB', 'brand' => 'Samsung', 'price' => 6499000, 'stock' => 12],

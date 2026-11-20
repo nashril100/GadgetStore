@@ -12,18 +12,23 @@ class ProfileTest extends TestCase
 
     public function test_profile_page_is_displayed(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'customer']);
 
         $response = $this
             ->actingAs($user)
             ->get('/profile');
 
-        $response->assertOk();
+        $response
+            ->assertOk()
+            ->assertSeeText('Profil & Keamanan')
+            ->assertSeeText('Informasi profil')
+            ->assertSeeText('Ubah kata sandi')
+            ->assertSeeText('Hapus akun');
     }
 
     public function test_profile_information_can_be_updated(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'customer']);
 
         $response = $this
             ->actingAs($user)

@@ -14,7 +14,7 @@
                     <th>Deskripsi</th>
                     <th>Status</th>
                     <th>Jumlah Produk</th>
-                    <th>Aksi</th>
+                    <th>G</th>
                 </tr>
             </thead>
             <tbody>

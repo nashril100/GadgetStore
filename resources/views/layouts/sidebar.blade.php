@@ -1,107 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"
+    aria-label="Navigasi utama">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('dashboard') }}">
+        <div class="sidebar-brand-icon">
+            <i class="fas fa-mobile-alt"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Gadget Store</div>
+    </a>
 
-<head>
+    <hr class="sidebar-divider my-0">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <div class="sidebar-heading">Menu utama</div>
 
-    <title>SB Admin 2 - Dashboard</title>
+    <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('dashboard') }}">
+            <i class="fas fa-fw fa-chart-pie"></i>
+            <span>Dashboard</span>
+        </a>
+    </li>
 
-    <!-- Custom fonts for this template-->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <hr class="sidebar-divider">
 
-    <!-- Custom styles for this template-->
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <div class="sidebar-heading">Katalog</div>
 
-</head>
+    <li class="nav-item {{ request()->routeIs('products.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('products.index') }}">
+            <i class="fas fa-fw fa-boxes"></i>
+            <span>Semua produk</span>
+        </a>
+    </li>
 
-<body id="page-top">
-
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-mobile"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">Gadget Store</div>
+    @if (auth()->user()->isAdmin())
+        <li class="nav-item {{ request()->routeIs('categories.*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('categories.index') }}">
+                <i class="fas fa-fw fa-tags"></i>
+                <span>Kategori</span>
             </a>
+        </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
+        <hr class="sidebar-divider">
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="/">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
+        <div class="sidebar-heading">Kelola data</div>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+        <li class="nav-item {{ request()->routeIs('products.create') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('products.create') }}">
+                <i class="fas fa-fw fa-plus-circle"></i>
+                <span>Tambah produk</span>
+            </a>
+        </li>
+        <li class="nav-item {{ request()->routeIs('categories.create') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('categories.create') }}">
+                <i class="fas fa-fw fa-folder-plus"></i>
+                <span>Tambah kategori</span>
+            </a>
+        </li>
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Halaman
-            </div>
+    @endif
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-tags"></i>
-                    <span>Kategori</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Halaman Kategori:</h6>
-                        <a class="collapse-item" href="{{ route('categories.index') }}">Index</a>
-                        <a class="collapse-item" href="{{ route('categories.create') }}">Create</a>
-                    </div>
-                </div>
-            </li>
+    <hr class="sidebar-divider">
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-boxes"></i>
-                    <span>Produk</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Halaman Produk:</h6>
-                        <a class="collapse-item" href="{{ route('products.index') }}">Index</a>
-                        <a class="collapse-item" href="{{ route('products.create') }}">Create</a>
-                    </div>
-                </div>
-            </li>
+    <div class="sidebar-heading">Akun</div>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+    <li class="nav-item {{ request()->routeIs('profile.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('profile.edit') }}">
+            <i class="fas fa-fw fa-user-cog"></i>
+            <span>Profil saya</span>
+        </a>
+    </li>
+    <li class="nav-item {{ request()->routeIs('settings.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('settings.index') }}">
+            <i class="fas fa-fw fa-sliders-h"></i>
+            <span>Pengaturan</span>
+        </a>
+    </li>
+    <li class="nav-item {{ request()->routeIs('activity.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('activity.index') }}">
+            <i class="fas fa-fw fa-history"></i>
+            <span>Riwayat aktivitas</span>
+        </a>
+    </li>
 
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
+    <div class="sidebar-card d-none d-lg-flex">
+        <i class="fas fa-user-circle fa-2x mb-2"></i>
+        <div class="sidebar-card-title text-center">{{ auth()->user()->name }}</div>
+        <p class="mb-2">{{ auth()->user()->isAdmin() ? 'Administrator' : 'Pengguna' }}</p>
+        <a class="btn btn-sm btn-outline-light btn-block" href="#" data-toggle="modal" data-target="#logoutModal">
+            <i class="fas fa-sign-out-alt mr-1"></i> Keluar
+        </a>
+    </div>
 
-            <!-- Sidebar Message -->
-            <div class="sidebar-card d-none d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-            </div>
+    <hr class="sidebar-divider d-none d-md-block">
 
-        </ul>
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle" aria-label="Ciutkan navigasi"></button>
+    </div>
+</ul>
